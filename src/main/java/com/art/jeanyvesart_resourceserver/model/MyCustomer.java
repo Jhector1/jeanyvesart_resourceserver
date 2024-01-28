@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -86,7 +87,10 @@ public class MyCustomer implements Serializable, MyUser {
     @Getter
     @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "myCustomer")
     private CustomerCart customerCart;
-
+    @Setter
+    @Getter
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Address> addressList;
     @Setter
     @Getter
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "myCustomer")
@@ -113,7 +117,7 @@ public class MyCustomer implements Serializable, MyUser {
         this.id = id;
         this.telephone = "00000000";
         this.collector = false;
-        this.password= "Password@StrongerThanYou1794";
+        this.password= "Password@StrongerThanYou1794"+id;
     }
 
 

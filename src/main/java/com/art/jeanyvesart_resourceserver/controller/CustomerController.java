@@ -1,15 +1,11 @@
 package com.art.jeanyvesart_resourceserver.controller;
 
-import com.art.jeanyvesart_resourceserver.dto.MyCurrentUserImpl;
-import com.art.jeanyvesart_resourceserver.dto.ReviewDto;
-import com.art.jeanyvesart_resourceserver.model.Inventory;
+import com.art.jeanyvesart_resourceserver.dto.CustomerDto;
+import com.art.jeanyvesart_resourceserver.model.Address;
 import com.art.jeanyvesart_resourceserver.model.MyCustomer;
-import com.art.jeanyvesart_resourceserver.model.MyProduct;
-import com.art.jeanyvesart_resourceserver.model.MyReview;
 import com.art.jeanyvesart_resourceserver.repository.CustomerRepository;
 import com.art.jeanyvesart_resourceserver.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,9 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,11 +24,13 @@ import java.util.stream.Collectors;
 
 public class CustomerController {
     private final CustomerRepository customerRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
-    protected CustomerController(CustomerRepository customerRepository, UserDetailsManager userDetailsManager, PasswordEncoder encoder, CustomerService customerService, PasswordEncoder passwordEncoder) {
+    protected CustomerController(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
 
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -73,38 +70,55 @@ public class CustomerController {
         }
 
     }
-    @PatchMapping(path = "/update/token/{token}", consumes = "application/json")
-    public ResponseEntity<?> patchCustomer(@PathVariable String token,
-                                                    @RequestBody String patch) {
+    @PatchMapping(path = "/account/update/{id}", consumes = "application/json")
+    public ResponseEntity<?> patchCustomer(@PathVariable String id,
+                                                    @RequestBody CustomerDto patch) {
 
-        Optional<MyCustomer> myCustomerOptional = customerRepository.findByResetToken(token);
+        Optional<MyCustomer> myCustomerOptional = customerRepository.findById(id);
+
+        log.info("cusyomer, {}", patch);
 
         if (myCustomerOptional.isPresent()) {
 
 
             MyCustomer myCustomer = myCustomerOptional.get();
-            long dateRegister = myCustomer.getResetTokenDate().getTime();
-            long expiredDate = new Date().getTime() - dateRegister;
-            if (expiredDate > 1800000) {
-                myCustomer.setResetTokenUsed(true);
+            log.info("cusyomer, {}", myCustomer);
+         if (patch.getFullName()!=null) {
+             myCustomer.setFullName(patch.getFullName());
+
             }
-         if (myCustomer.isResetTokenUsed()) {
+            if (patch.getTelephone()!=null) {
+                myCustomer.setTelephone(patch.getTelephone());
 
-             return new ResponseEntity<>("Sorry token is expired", HttpStatus.UNAUTHORIZED);
+            }  if (patch.getEmail()!=null) {
+                myCustomer.setEmail(patch.getEmail());
+
+            }  if (patch.getPassword()!=null) {
+                myCustomer.setPassword(passwordEncoder.encode(patch.getPassword()));
+
+            }  if (patch.getAddress()!=null) {
+                boolean flag = true;
+
+                Set<Address> set = myCustomer.getAddressList();
+                for (Address address : set) {
+                    if (address.getZip().equals(patch.getAddress().getZip()) && address.getStreet().equals(patch.getAddress().getStreet())) {
+                        address.updateAddress(patch.getAddress());
+                        flag = false;
+                        break;
+                    }
+
+                }
+                if (flag) {
+                    set.add(patch.getAddress());
+                }
+                myCustomer.setAddressList(set);
             }
-            myCustomer.setPassword(patch);
 
-            // Mark token as used
-            myCustomer.setResetTokenUsed(true);
-            myCustomer.setResetToken(null);
-
-
-           // BeanUtils.copyProperties(patch, myCustomer, );
             customerRepository.save(myCustomer);
             return ResponseEntity.ok(myCustomer);
 
         }
-        return new ResponseEntity<>("An error occurred, please check the email you provided", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("An error occurred", HttpStatus.NOT_FOUND);
 
 
     }
@@ -129,6 +143,44 @@ public class CustomerController {
         }
 
     }
+
+
+    @PatchMapping(path = "/update/info/{token}", consumes = "application/json")
+    public ResponseEntity<?> patchCustomer(@PathVariable String token,
+                                           @RequestBody String patch) {
+
+        Optional<MyCustomer> myCustomerOptional = customerRepository.findByResetToken(token);
+
+        if (myCustomerOptional.isPresent()) {
+
+
+            MyCustomer myCustomer = myCustomerOptional.get();
+            long dateRegister = myCustomer.getResetTokenDate().getTime();
+            long expiredDate = new Date().getTime() - dateRegister;
+            if (expiredDate > 1800000) {
+                myCustomer.setResetTokenUsed(true);
+            }
+            if (myCustomer.isResetTokenUsed()) {
+
+                return new ResponseEntity<>("Sorry token is expired", HttpStatus.UNAUTHORIZED);
+            }
+            myCustomer.setPassword(patch);
+
+            // Mark token as used
+            myCustomer.setResetTokenUsed(true);
+            myCustomer.setResetToken(null);
+
+
+            // BeanUtils.copyProperties(patch, myCustomer, );
+            customerRepository.save(myCustomer);
+            return ResponseEntity.ok("Data Update Successfully");
+
+        }
+        return new ResponseEntity<>("An error occurred, please check the email you provided", HttpStatus.NOT_FOUND);
+
+
+    }
+
 
     // rest of the implementation
 

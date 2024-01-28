@@ -1,9 +1,12 @@
 package com.art.jeanyvesart_resourceserver.dto;
 
+import com.art.jeanyvesart_resourceserver.model.Address;
 import com.art.jeanyvesart_resourceserver.validation.PasswordMatches;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
@@ -11,7 +14,7 @@ import lombok.NoArgsConstructor;
 
 
 
-public class CustomerDto implements MyCurrentUser {
+public class CustomerDto implements MyCurrentUser, Serializable {
     private String fullName;
     private String id;
     @PasswordMatches(message = "Password Invalid. Password" +
@@ -20,5 +23,7 @@ public class CustomerDto implements MyCurrentUser {
     private String password;
     private String matchingPassword;
    // @ValidEmail(message ="Email is Invalid")
+    private String telephone;
+    private  Address address;
     private String email;
 }
