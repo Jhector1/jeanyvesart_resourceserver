@@ -4,8 +4,11 @@ import com.art.jeanyvesart_resourceserver.dto.EmailClient;
 import com.art.jeanyvesart_resourceserver.model.MyCustomer;
 import com.art.jeanyvesart_resourceserver.repository.CustomerRepository;
 import com.art.jeanyvesart_resourceserver.service.EmailServiceImpl;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,9 +21,17 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@Slf4j
 @RequestMapping(produces = "application/json")
 
 public class EmailController {
+    @Value("${base.url.client}")
+    private String url;
+    private static String baseUrl;
+    @PostConstruct
+    public void init() {
+        baseUrl = url;
+    }
     final
     EmailServiceImpl emailService;
     public final CustomerRepository customerRepository;
@@ -33,10 +44,12 @@ public class EmailController {
     @PostMapping("/sendemail")
     public ResponseEntity<String> sendEmail(@RequestBody EmailClient emailClient) {
         try {
-            //emailService.sendSimpleMessage(emailClient.getEmailFrom(), emailClient.getEmailTo(), "Thanks For Contacting Jean Yves Art", "Thank you for reaching out to Jean Yves Art. We will respond to your inquiry as soon as possible.");
+            emailService.sendSimpleMessage(emailClient.getEmailFrom(), emailClient.getEmailTo(), emailClient.getSubject(), emailClient.getMessage());
+
+            emailService.sendSimpleMessage(emailClient.getEmailFrom(), emailClient.getEmailTo(), "Thanks For Contacting Jean Yves Art", "Thank you for reaching out to Jean Yves Art. We will respond to your inquiry as soon as possible.");
 
 
-            emailService.sendMessageWithAttachment(emailClient.getEmailTo(), emailClient.getEmailFrom(), emailClient.getSubject(), emailClient.getMessage(), emailClient.getFileAttachment());
+           // emailService.sendMessageWithAttachment(emailClient.getEmailTo(), emailClient.getEmailFrom(), emailClient.getSubject(), emailClient.getMessage(), emailClient.getFileAttachment());
             return new ResponseEntity<>("Thank for your message", HttpStatus.OK);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -52,9 +65,11 @@ public class EmailController {
             Optional<MyCustomer> optionalMyCustomer = customerRepository.findByEmail(emailClient.getEmailTo());
            if (optionalMyCustomer.isPresent()) {
                 String uuidString = UUID.randomUUID().toString();
+                log.info("token received, {}", uuidString);
                 MyCustomer customer = optionalMyCustomer.get();
+               log.info("customer, {}", customer);
                 //emailService.sendSimpleMessage(emailClient.getEmailFrom(), emailClient.getEmailTo(), "Thanks For Contacting Jean Yves Art", "Thank you for reaching out to Jean Yves Art. We will respond to your inquiry as soon as possible.");
-                String url = "http://localhost:7070/reset-password?token=" + uuidString +"&action=reset_password";
+                String url = baseUrl+"/reset-password?token=" + uuidString +"&action=reset_password";
                 String body = "Jean Yves Art\n" +
                         "Hi "+customer.getFullName()+", let's reset your password.\n" +
                         url+

@@ -145,11 +145,13 @@ public class CustomerController {
     }
 
 
-    @PatchMapping(path = "/update/info/{token}", consumes = "application/json")
-    public ResponseEntity<?> patchCustomer(@PathVariable String token,
+    @PatchMapping(path = "/update/info/{token}", produces = "application/json", consumes = "application/json")
+    public ResponseEntity<String> patchCustomer(@PathVariable String token,
                                            @RequestBody String patch) {
-
         Optional<MyCustomer> myCustomerOptional = customerRepository.findByResetToken(token);
+        log.info("patch , {}", patch);
+        log.info("patch , {}", token);
+
 
         if (myCustomerOptional.isPresent()) {
 
@@ -173,10 +175,14 @@ public class CustomerController {
 
             // BeanUtils.copyProperties(patch, myCustomer, );
             customerRepository.save(myCustomer);
-            return ResponseEntity.ok("Data Update Successfully");
+            String jsonString = "{\"message\": \"Data Update Successfully!\"}"; // Your JSON string
+
+            return new ResponseEntity<>(jsonString, HttpStatus.OK);
 
         }
-        return new ResponseEntity<>("An error occurred, please check the email you provided", HttpStatus.NOT_FOUND);
+        String jsonString = "{\"error\": \"An error occurred, unrecognized token!\"}"; // Your JSON string
+
+        return new ResponseEntity<>(jsonString, HttpStatus.NOT_FOUND);
 
 
     }

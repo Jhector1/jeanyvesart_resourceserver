@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,16 @@ public class PurchaseArtworkController {
         List<MyProduct> myProducts = new ArrayList<>();
         for (MyOrder order : orders) {
             myProducts.addAll(order.getMyProducts());
+        }
+        return myProducts;
+
+    }
+    @GetMapping("/purchase-all")
+    public List<Long> artPurchaseAllIds() {
+        Iterable<Inventory> inventoryOptional = inventoryRepository.findAllByQuantityEquals( 0);
+        List<Long> myProducts = new ArrayList<>();
+        for (Inventory order : inventoryOptional) {
+            myProducts.add(Long.parseLong(order.getId().substring(5)));
         }
         return myProducts;
 

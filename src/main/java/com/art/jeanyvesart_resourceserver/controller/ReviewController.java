@@ -23,7 +23,6 @@ import java.util.Optional;
 @Slf4j
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:8080/", "https://jeanyveshector.com/"})
 
 @RequestMapping(path = "/product/review", produces = "application/json")
 public class ReviewController {

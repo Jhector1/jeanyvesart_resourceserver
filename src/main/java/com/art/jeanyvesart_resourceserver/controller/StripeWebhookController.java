@@ -133,7 +133,7 @@ public class StripeWebhookController {
 //                                customerProduct.setProductId(inventoryToUpdate.getMyProduct().getId());
                                 MyResourceManager.manageUserData(favoriteHelperRepository, deleteFavoriteEndpoint, artworkId);
                             }
-                            MyResourceManager.updateInventoryWithPatch(inventory, patchEndpoint);
+                            MyResourceManager.updateInventoryWithPatch(inventory, patchEndpoint , customerId);
 
                             MyResourceManager.manageUserData(customerCartHelperRepository, deleteCartEndpoint, artworkId);
 

@@ -7,11 +7,16 @@ import com.art.jeanyvesart_resourceserver.helper.Shippable;
 import com.art.jeanyvesart_resourceserver.model.Checkout;
 import com.art.jeanyvesart_resourceserver.model.MyProduct;
 import com.art.jeanyvesart_resourceserver.service.StripeService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +25,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@SessionAttributes({"checkout"})
+//@SessionAttributes({"checkout"})
 @RestController
-
+@Slf4j
 @RequestMapping("/cart/checkout")
 public class CheckoutController {
     private final StripeService stripeService;
@@ -50,11 +55,6 @@ public class CheckoutController {
 
     @PostMapping("/create-checkout-session")
     public ResponseEntity<?> createCheckoutSession(@RequestBody ProductList productList) {
-
-
-
-
-
         try {
             List<SessionCreateParams.LineItem> allCartData = new ArrayList<>();
             for (StripeProduct stripeProduct : productList.getCartProductList()) {
@@ -172,16 +172,17 @@ public class CheckoutController {
 
                     .build();
             Session session = Session.create(params);
-//            Gson gson = new GsonBuilder().create();
-//            String sessionJson = gson.toJson(session);
-//            JsonObject sessionJsonObject = JsonParser.parseString(sessionJson).getAsJsonObject();
-//            String sessionId = sessionJsonObject.get("id").getAsString();
-            return new ResponseEntity<>(session.getId(), HttpStatus.OK);
-        } catch (StripeException e) {
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            Gson gson = new GsonBuilder().create();
+            String sessionJson = gson.toJson(session);
+            JsonObject sessionJsonObject = JsonParser.parseString(sessionJson).getAsJsonObject();
+            String sessionId = sessionJsonObject.get("id").getAsString();
+           return new ResponseEntity<>(sessionId, HttpStatus.OK);
+       } catch (Exception c){
+            log.info("Yo listen {} " ,c.getMessage());
+            return new ResponseEntity<>(c.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
+
     }
 //
 ////    @Bean

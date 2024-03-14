@@ -4,6 +4,7 @@ import com.art.jeanyvesart_resourceserver.dto.MyOrderDto;
 import com.art.jeanyvesart_resourceserver.model.*;
 import com.art.jeanyvesart_resourceserver.repository.CustomerDataHelperRepository;
 import com.art.jeanyvesart_resourceserver.repository.CustomerRepository;
+import com.art.jeanyvesart_resourceserver.security.service.Token;
 import com.stripe.Stripe;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -58,10 +60,12 @@ public class MyResourceManager {
     }
 
 
-    public static void updateInventoryWithPatch(Inventory inventory, String url) {
+    public static void updateInventoryWithPatch(Inventory inventory, String url, String identifier) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("X-IDENTIFIER", identifier.substring(identifier.length()/2));
+        headers.add("X-CSRF-TOKEN", getCSRF(request, identifier).getToken());
 
         HttpEntity<Inventory> requestEntity = new HttpEntity<>(inventory, headers);
 
@@ -87,6 +91,22 @@ public class MyResourceManager {
 
     public static void deleteCustomerData(String url, String id) {
         restTemplate.delete(url, id);
+    }
+    public static Token getCSRF(HttpServletRequest request, String identifier) {
+        String url =baseUrl+"/csrf/token";
+//log.info("cookie user id : {}", Helper.getCookieValue(request, "user12345"));
+        // Create HttpHeaders and add custom headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-IDENTIFIER", identifier.substring(identifier.length()/2));
+
+        // Create HttpEntity with headers
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+        // Send GET request with headers
+        ResponseEntity<Token> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Token.class);
+        log.info("token obj: {}", Objects.requireNonNull(response.getBody()).getToken());
+        // Process response as needed
+        return response.getBody();
     }
 
     public static <H extends CustomerDataHelper, M extends CustomerData<H>> void removeExpiredUserData(List<H> resource) {

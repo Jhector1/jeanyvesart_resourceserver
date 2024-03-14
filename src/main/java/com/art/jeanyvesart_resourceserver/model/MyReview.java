@@ -19,7 +19,7 @@ public class MyReview implements Serializable {
     @Column(length = 10000)
 
     private String reviewText;
-    @OneToOne
+    @ManyToOne
     private MyProduct product;
     private int rating;
     private Date date = new Date();

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -74,12 +75,15 @@ public abstract class CustomerDataController<H extends CustomerDataHelper, R ext
         Optional<M> item = repository.findByMyCustomer_Id(userID);
         if (item.isPresent()) {
             List<H> products = item.get().getCustomerDataHelpers();
-            if (products.size() > 0) {
+            if (!products.isEmpty()) {
                 return new ResponseEntity<>(products.stream()
                         .map(product ->
                                 new ProductAndInventory(inventoryRepository.findById("00000" + product.getMyProduct().getId()).get().getQuantity(), product.getMyProduct(), product.getQuantity()))
                         .collect(Collectors.toList())
                         , HttpStatus.OK);
+            }
+            else{
+                return  new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);

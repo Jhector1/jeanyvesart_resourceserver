@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface InventoryRepository extends CrudRepository<Inventory, String> {
     Optional<Inventory> findByIdAndQuantityEquals(String id, int quantity);
+
+    Iterable<Inventory> findAllByQuantityEquals(int quantity);
 }
