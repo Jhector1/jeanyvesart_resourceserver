@@ -16,14 +16,13 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@DiscriminatorColumn(name = "product",
-        discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorColumn(name = "product", discriminatorType = DiscriminatorType.STRING)
 @AllArgsConstructor
 public  class MyProduct implements Serializable  {
     private static final long serialVersionUID = 123456789L;
 
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "my_sequence_generator")
-    @SequenceGenerator(name = "my_sequence_generator", sequenceName = "my_sequence", initialValue = 0, allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.AUTO, generator = "my_sequence_generator")
+//    @SequenceGenerator(name = "my_sequence_generator", sequenceName = "my_sequence", initialValue = 0, allocationSize = 1)
     @Id
     private long id;
     private String imageUrl;

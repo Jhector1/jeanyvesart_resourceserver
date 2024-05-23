@@ -55,7 +55,7 @@ public abstract class CustomerDataController<H extends CustomerDataHelper, R ext
         Optional<M> items = repository.findByMyCustomer_Id(userID);
         // MyResourceManager.removeExpiredUser(userID);
         //removeBuyerCart(buyerCartItems.get());
-
+        //System.out.println(inventoryRepository.findAllByCategory("Print"));
 
         if (items.isPresent()) {
             List<H> products = items.get().getCustomerDataHelpers();

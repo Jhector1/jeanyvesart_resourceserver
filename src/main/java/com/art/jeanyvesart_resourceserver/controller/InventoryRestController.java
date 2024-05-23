@@ -1,12 +1,9 @@
 package com.art.jeanyvesart_resourceserver.controller;
 
 import com.art.jeanyvesart_resourceserver.model.Artwork;
+import com.art.jeanyvesart_resourceserver.model.DepotInventory;
 import com.art.jeanyvesart_resourceserver.model.Inventory;
-import com.art.jeanyvesart_resourceserver.repository.ArtworkRepository;
-import com.art.jeanyvesart_resourceserver.repository.CustomerCartRepository;
-import com.art.jeanyvesart_resourceserver.repository.CustomerFavoriteRepository;
-import com.art.jeanyvesart_resourceserver.repository.InventoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.art.jeanyvesart_resourceserver.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,15 +19,18 @@ public class InventoryRestController {
     final
     ArtworkRepository artworkRepository;
     final
+    DepotInventoryRepository depotInventoryRepository;
+    final
     CustomerCartRepository cartArtworkRepository;
     final
     CustomerFavoriteRepository favoriteArtworkRepository;
 
-    public InventoryRestController(InventoryRepository repository, CustomerCartRepository cartArtworkRepository, CustomerFavoriteRepository favoriteArtworkRepository, ArtworkRepository artworkRepository) {
+    public InventoryRestController(InventoryRepository repository, CustomerCartRepository cartArtworkRepository, CustomerFavoriteRepository favoriteArtworkRepository, ArtworkRepository artworkRepository, DepotInventoryRepository depotInventoryRepository) {
         this.repository = repository;
         this.cartArtworkRepository = cartArtworkRepository;
         this.favoriteArtworkRepository = favoriteArtworkRepository;
         this.artworkRepository = artworkRepository;
+        this.depotInventoryRepository = depotInventoryRepository;
     }
 
     @GetMapping("/{id}")
@@ -90,4 +90,20 @@ public class InventoryRestController {
         put.setId(inventoryId);
         return artworkRepository.save(put);
     }
+
+    @GetMapping(path="/category/{category}")
+    public Iterable<DepotInventory> findByCategory(@PathVariable String category){
+       // System.out.println(repository.findAllByCategory("Print"));
+        return depotInventoryRepository.findByCategory(category);
+    }
+    @GetMapping(path="/category/all")
+    public Iterable<DepotInventory> findByAllCategory(){
+        // System.out.println(repository.findAllByCategory("Print"));
+        return depotInventoryRepository.findAll();
+    }
+
+//    @GetMapping(path="/{group}", consumes = "application/json")
+//    public Iterable<Inventory> findByAllGroup(String group){
+//        return repository.findAllByGroup(group);
+//    }
 }

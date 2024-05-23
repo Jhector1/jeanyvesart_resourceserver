@@ -3,6 +3,7 @@ package com.art.jeanyvesart_resourceserver.helper;
 import com.art.jeanyvesart_resourceserver.model.Inventory;
 import com.art.jeanyvesart_resourceserver.model.MyProduct;
 import com.art.jeanyvesart_resourceserver.site_data.metadata.AssociateInventoryMetadata;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,9 +14,12 @@ import static com.art.jeanyvesart_resourceserver.site_data.metadata.AssociateInv
 
 
 public class InventoryManager {
+    @Getter
     private final static  Map<String , List<MyProduct>> productPool = new HashMap<>();
     //private static int count=0;
     private static List<MyProduct> productList= new ArrayList<>();
+    // addToInventoryList();
+    @Getter
     private static final List<Inventory> inventoryList = new ArrayList<>();
     public static void initProductList(List<MyProduct> productList){
         InventoryManager.productList = productList;
@@ -41,14 +45,6 @@ public class InventoryManager {
 
     }
 
-    public static Map<String, List<MyProduct>> getProductPool() {
-        return productPool;
-    }
-
-    public static List<Inventory> getInventoryList() {
-       // addToInventoryList();
-        return inventoryList;
-    }
     private static String getCategory(String imageUrl) {
         if (imageUrl.toLowerCase().trim().contains("paintings")) {
             return "Paintings";

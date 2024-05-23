@@ -30,6 +30,7 @@ public class CorsConfig {
         // Set allowed origins, methods, and headers
        // config.addAllowedOrigin("https://jeanyveshector.com/");
         config.addAllowedOrigin(clientBaseUrl);
+
         //config.addAllowedOrigin(serverBaseUrl);
 
 
