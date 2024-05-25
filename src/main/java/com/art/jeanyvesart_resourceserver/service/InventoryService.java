@@ -84,26 +84,26 @@ public class InventoryService {
 //
 //        };
 //    }
-    public static void fillInventory(List<MyProduct> products, List<Inventory> inventories, int quantity) {
+    public static void fillInventory(List<MyProduct> products, List<Inventory> inventories) {
         products.forEach(myProduct -> {
 
             Inventory inventory = new Inventory();
             inventory.setId("00000" + myProduct.getId());
 
-            inventory.setQuantity(quantity);
+            inventory.setQuantity(myProduct.getQuantity());
             inventory.setMyProduct(myProduct);
             inventories.add(inventory);
 
         });
     }
 public static void fillAll(){
-    fillInventory(displayLittleBlackAngelSeries(), inventoryPaintings, 1);
-   fillInventory(displayEnlightenmentSeries(), inventoryPaintings, 1);
-  fillInventory(displayHealing_plantsSeries(), inventoryPaintings, 1);
-  fillInventory(displayRenaissanceSeries(), inventoryPaintings, 1);
+    fillInventory(displayLittleBlackAngelSeries(), inventoryPaintings);
+   fillInventory(displayEnlightenmentSeries(), inventoryPaintings);
+  fillInventory(displayHealing_plantsSeries(), inventoryPaintings);
+  fillInventory(displayRenaissanceSeries(), inventoryPaintings);
 
-    fillInventory(displayGreenEnergySeries(), inventoryPrint, 6);
-    fillInventory(displayJacketSeries(), inventoryClothes, 1);
+    fillInventory(displayGreenEnergySeries(), inventoryPrint);
+    fillInventory(displayJacketSeries(), inventoryClothes);
 }
     @Bean
 

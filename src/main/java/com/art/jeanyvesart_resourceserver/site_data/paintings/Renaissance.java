@@ -59,12 +59,12 @@ public class Renaissance implements Serie {
         renaissanceSeries.add(
                 new Artwork(28,"/images/paintings/renaissance/renaissance8.webp",
                         "Rafael and Michael", "unavailable",
-                        "Oil on canvas","126x80inch", description,1,new ArrayList<>()
+                        "Oil on canvas","126x80inch", description,0,new ArrayList<>()
                 ));
         renaissanceSeries.add(
                 new Artwork(29,"/images/paintings/renaissance/renaissance9.webp",
                         "The Fruit of Resilience", "unavailable",
-                        "Oil on canvas","8x8inch", description,1,new ArrayList<>()
+                        "Oil on canvas","8x8inch", description,0,new ArrayList<>()
                 ));
     }
 

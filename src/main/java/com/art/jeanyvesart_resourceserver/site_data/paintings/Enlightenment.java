@@ -43,7 +43,7 @@ public List<String> enlightenmentDescriptions =
         enlightenmentSeries.add(
                 new Artwork(2, "/images/paintings/enlightenment/enlightenment2.webp",
                         "My garden, my life, my peace", "Unavailable",
-                        "Oil and Acrylic on canvas", "36x36inch", enlightenmentDescriptions.get(2),1,new ArrayList<>()
+                        "Oil and Acrylic on canvas", "36x36inch", enlightenmentDescriptions.get(2),0,new ArrayList<>()
                 ));
 
         enlightenmentSeries.add(
@@ -61,7 +61,7 @@ public List<String> enlightenmentDescriptions =
         enlightenmentSeries.add(
                 new Artwork(5, "/images/paintings/enlightenment/enlightenment5.webp",
                         "Enlighten", "unavailable",
-                        "Oil and Acrylic on canvas", "24x24inch", description,1,new ArrayList<>()
+                        "Oil and Acrylic on canvas", "24x24inch", description,0,new ArrayList<>()
                 ));
 
 

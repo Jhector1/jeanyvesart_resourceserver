@@ -31,7 +31,7 @@ public class Clothe implements Serie {
         jacketSeries.add(
                 new Artwork(32,"/images/clothes/jacket/jacket2.webp",
                         "Jacket Beni", "Unavailable",
-                        "","Medium", description,1,new ArrayList<>()
+                        "","Medium", description,0,new ArrayList<>()
                 ));
         jacketSeries.add(
                 new Artwork(33,"/images/clothes/jacket/jacket3.webp",
@@ -41,7 +41,7 @@ public class Clothe implements Serie {
         jacketSeries.add(
                 new Artwork(34,"/images/clothes/jacket/jacket4.webp",
                         "Jacket Beni", "Unavailable",
-                        "","Medium", description,1,new ArrayList<>()
+                        "","Medium", description,0,new ArrayList<>()
                 ));
     }
 

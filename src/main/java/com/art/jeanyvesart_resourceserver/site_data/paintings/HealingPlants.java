@@ -45,7 +45,7 @@ public class HealingPlants implements Serie {
         healingPlantsSeries.add(
                 new Artwork(9, "/images/paintings/healing_plants/healing3.webp",
                         "Blossom Season", "unavailable",
-                        "Oil on canvas", "20x20inch", description,1,new ArrayList<>()
+                        "Oil on canvas", "20x20inch", description,0,new ArrayList<>()
                 ));
         healingPlantsSeries.add(
                 new Artwork(10, "/images/paintings/healing_plants/healing4.webp",
@@ -60,7 +60,7 @@ public class HealingPlants implements Serie {
         healingPlantsSeries.add(
                 new Artwork(12, "/images/paintings/healing_plants/healing6.webp",
                         "Moon Trees", "unavailable",
-                        "Oil and Acrylic on canvas", "12x12inch", description,1,new ArrayList<>()
+                        "Oil and Acrylic on canvas", "12x12inch", description,0,new ArrayList<>()
                 ));
         healingPlantsSeries.add(
                 new Artwork(13, "/images/paintings/healing_plants/healing7.webp",
