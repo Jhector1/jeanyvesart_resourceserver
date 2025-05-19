@@ -19,7 +19,7 @@ import java.util.UUID;
 @Entity
 @Component
 @AllArgsConstructor
-@JsonIgnoreProperties({"customerFavorite", "customerCart", "myOrders", "myReviews"})
+@JsonIgnoreProperties({"customerFavorite", "customerCart", "myOrders", "myReviews", "recentlyViewed"})
 public class MyCustomer implements Serializable, MyUser {
     //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "my_sequence_customer")
 //    @SequenceGenerator(name = "my_sequence_customer", sequenceName = "my_customer", initialValue = 0, allocationSize = 1)
@@ -95,6 +95,12 @@ public class MyCustomer implements Serializable, MyUser {
     @Getter
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "myCustomer")
     private List<MyOrder> myOrders;
+
+    @Setter
+    @Getter
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "myCustomer")
+    private RecentlyViewed recentlyViewed;
+
 
     @Setter
     @Getter

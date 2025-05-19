@@ -1,0 +1,10 @@
+package com.art.jeanyvesart_resourceserver.repository;
+
+import com.art.jeanyvesart_resourceserver.model.ImageData;
+import com.art.jeanyvesart_resourceserver.model.MyProduct;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ImageDataRepository extends CrudRepository<ImageData, Long> {
+}

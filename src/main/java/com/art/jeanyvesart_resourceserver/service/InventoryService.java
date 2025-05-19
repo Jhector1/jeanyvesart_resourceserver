@@ -107,9 +107,11 @@ public static void fillAll(){
 }
     @Bean
 
-    public static CommandLineRunner allArtworkSave3(DepotInventoryRepository repo, InventoryRepository inventoryRepository, EntityManager entityManager) {
+    public static CommandLineRunner allArtworkSave3(DepotInventoryRepository repo, InventoryRepository inventoryRepository,CustomerRepository customerRepository) {
    fillAll();
         return args -> {
+
+
             // InventoryManager.initProductList(allProducts());
             // IntStream.range(0, allProducts().size()).forEach(InventoryManager::addToInventoryList);
             //InventoryManager.initProductList(allProducts());

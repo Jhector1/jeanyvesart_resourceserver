@@ -33,7 +33,15 @@ public class EmailServiceImpl  {
         emailSender.send(message);
         System.out.println("...send");
     }
-    
+    public void sendHtmlEmail(String from,String to, String subject, String htmlContent) throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(to);
+        helper.setFrom(from);
+        helper.setSubject(subject);
+        helper.setText(htmlContent, true);
+        emailSender.send(message);
+    }
     public void sendMessageWithAttachment(
             String to, String from, String subject, String text, String pathToAttachment) {
         // ...

@@ -53,6 +53,7 @@ public class CustomerController {
 
             return new ResponseEntity<>(customerOptional.get(), HttpStatus.OK);
         } else {
+            log.info("error, {}", "cannot access ressource");
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         }
 

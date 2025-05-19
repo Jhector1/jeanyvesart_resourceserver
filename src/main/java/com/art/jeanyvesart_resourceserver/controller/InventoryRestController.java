@@ -4,6 +4,7 @@ import com.art.jeanyvesart_resourceserver.model.Artwork;
 import com.art.jeanyvesart_resourceserver.model.DepotInventory;
 import com.art.jeanyvesart_resourceserver.model.Inventory;
 import com.art.jeanyvesart_resourceserver.repository.*;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -94,12 +95,12 @@ public class InventoryRestController {
     @GetMapping(path="/category/{category}")
     public Iterable<DepotInventory> findByCategory(@PathVariable String category){
        // System.out.println(repository.findAllByCategory("Print"));
-        return depotInventoryRepository.findByCategory(category);
+        return depotInventoryRepository.findByCategory(Sort.by(Sort.Direction.DESC, "id"),category);
     }
     @GetMapping(path="/category/all")
     public Iterable<DepotInventory> findByAllCategory(){
         // System.out.println(repository.findAllByCategory("Print"));
-        return depotInventoryRepository.findAll();
+        return depotInventoryRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
 //    @GetMapping(path="/{group}", consumes = "application/json")

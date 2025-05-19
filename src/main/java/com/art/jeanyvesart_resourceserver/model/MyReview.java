@@ -17,7 +17,6 @@ public class MyReview implements Serializable {
     private MyCustomer myCustomer;
     private String headline;
     @Column(length = 10000)
-
     private String reviewText;
     @ManyToOne
     private MyProduct product;

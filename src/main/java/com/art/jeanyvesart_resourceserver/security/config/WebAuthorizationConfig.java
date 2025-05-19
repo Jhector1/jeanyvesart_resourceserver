@@ -1,8 +1,8 @@
 package com.art.jeanyvesart_resourceserver.security.config;
 
-import com.art.jeanyvesart_resourceserver.security.component.authenticationProvider.CustomAuthenticationProvider;
 
 import com.art.jeanyvesart_resourceserver.security.csrf.CustomCsrfTokenRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,16 +12,21 @@ import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Configuration
 public class WebAuthorizationConfig {
+    @Value("${keySetURI}")
+    private String keySetUri;
+    private final JwtAuthenticationConverter converter;
+
     private final CustomCsrfTokenRepository csrfTokenRepository;
-    private final CustomAuthenticationProvider authenticationProvider;
+//    private final CustomAuthenticationProvider authenticationProvider;
 
 
     public WebAuthorizationConfig(
 
-            CustomCsrfTokenRepository csrfTokenRepository, CustomAuthenticationProvider authenticationProvider) {
+            JwtAuthenticationConverter converter, CustomCsrfTokenRepository csrfTokenRepository){//, CustomAuthenticationProvider authenticationProvider) {
+        this.converter = converter;
         this.csrfTokenRepository = csrfTokenRepository;
 
-        this.authenticationProvider = authenticationProvider;
+//        this.authenticationProvider = authenticationProvider;
 
     }
 
@@ -37,7 +42,12 @@ public class WebAuthorizationConfig {
             c.ignoringRequestMatchers("/h2-console/**", "/cart/**", "/favorite/**", "/stripe/**", "/api/artworks/purchase/**");
         }).headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
-
+        http.oauth2ResourceServer(
+                c -> c.jwt(
+                        j -> j.jwkSetUri(keySetUri)
+                                .jwtAuthenticationConverter(converter)
+                )
+        );
         http.authorizeHttpRequests(
                 c -> {
 
@@ -68,8 +78,8 @@ public class WebAuthorizationConfig {
 //                .logoutSuccessUrl("/login")
 //                .permitAll());
 
-        http.authenticationProvider(authenticationProvider);
-        //http.csrf(AbstractHttpConfigurer::disable);///.headers(h->h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+       // http.authenticationProvider(authenticationProvider);
+        http.csrf(A->A.disable()).headers(h->h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         return http.build();
     }
 

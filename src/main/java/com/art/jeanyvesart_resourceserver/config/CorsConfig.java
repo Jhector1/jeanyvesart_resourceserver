@@ -30,6 +30,11 @@ public class CorsConfig {
         // Set allowed origins, methods, and headers
        // config.addAllowedOrigin("https://jeanyveshector.com/");
         config.addAllowedOrigin(clientBaseUrl);
+        config.addAllowedOrigin("http://localhost:5050");
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedOrigin("http://127.0.0.1:5050");
+
+
 
         //config.addAllowedOrigin(serverBaseUrl);
 

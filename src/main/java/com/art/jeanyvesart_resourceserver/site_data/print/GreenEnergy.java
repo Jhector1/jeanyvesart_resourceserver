@@ -27,45 +27,45 @@ public class GreenEnergy implements Serie {
         greenEnergySeries.add(
                 new Artwork(36,"/images/prints/green_energy/green_energy1.webp",
                         "Protector", "120",
-                        "print on arches 88 paper","12x16inch",description,1,new ArrayList<>()
+                        "print on arches 88 paper","12x16inch",description,7,new ArrayList<>()
                 ));
         greenEnergySeries.add(
                 new Artwork(37,"/images/prints/green_energy/green_energy2.webp",
                         "Protector", "120",
-                        "print on arches 88 paper","12x16inch",description,1,new ArrayList<>()
+                        "print on arches 88 paper","12x16inch",description,7,new ArrayList<>()
                 ));
         greenEnergySeries.add(
                 new Artwork(38,"/images/prints/green_energy/green_energy3.webp",
                         "Lonesome Green Halo", "120",
-                        "print on arches 88 paper","12x12inch",description,1,new ArrayList<>()
+                        "print on arches 88 paper","12x12inch",description,5,new ArrayList<>()
                 ));
         greenEnergySeries.add(
                 new Artwork(39,"/images/prints/green_energy/green_energy4.webp",
                         "Lonesome Green Halo", "120",
-                        "print on arches 88 paper","12x12inch",description,1,new ArrayList<>()
+                        "print on arches 88 paper","12x12inch",description,6,new ArrayList<>()
                 ));
         greenEnergySeries.add(
                 new Artwork(40,"/images/prints/green_energy/green_energy5.webp",
                         "Lonesome Lover", "120",
-                        "print on arches 88 paper","12x12inch",description,1,new ArrayList<>()
+                        "print on arches 88 paper","12x12inch",description,10,new ArrayList<>()
                 ));
         greenEnergySeries.add(
                 new Artwork(41,"/images/prints/green_energy/green_energy6.webp",
                         "Snapshot of a beautiful burnt-out era", "120",
-                        "print on arches 88 paper","12x12inch", description,1,new ArrayList<>()
+                        "print on arches 88 paper","12x12inch", description,12,new ArrayList<>()
                 ));    greenEnergySeries.add(
                 new Artwork(42,"/images/prints/green_energy/green_energy7.webp",
                         "Snapshot of a time when the Gods use to party", "120",
-                        "print on arches 88 paper","12x12inch", description,1,new ArrayList<>()
+                        "print on arches 88 paper","12x12inch", description,3,new ArrayList<>()
                 ));    greenEnergySeries.add(
                 new Artwork(43,"/images/prints/green_energy/green_energy8.webp",
                         "Snapshot of the rising sun", "120",
-                        "print on arches 88 paper","12x12inch", description,1,new ArrayList<>()
+                        "print on arches 88 paper","12x12inch", description,4,new ArrayList<>()
                 ));
         greenEnergySeries.add(
                 new Artwork(44,"/images/prints/green_energy/green_energy9.webp",
                         "Snapshot of a time without bubble", "120",
-                        "print on arches 88 paper","12x12inch", description,1,new ArrayList<>()
+                        "print on arches 88 paper","12x12inch", description,15,new ArrayList<>()
                 ));
     }
 
