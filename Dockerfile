@@ -10,7 +10,7 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 RUN mvn package -DskipTests -B
 
-# --- Stage 2: run the JAR ---
+# --- v Stage 2: run the JAR ---
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 
