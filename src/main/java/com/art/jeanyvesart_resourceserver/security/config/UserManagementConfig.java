@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 
 @Configuration
 public class UserManagementConfig {
-
+//cors
   @Bean
   public JdbcUserDetailsManager userDetailsService(DataSource dataSource) {
     String usersByUsernameQuery =
