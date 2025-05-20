@@ -6,7 +6,7 @@ import com.art.jeanyvesart_resourceserver.model.*;
 import com.art.jeanyvesart_resourceserver.repository.*;
 import com.art.jeanyvesart_resourceserver.site_data.paintings.*;
 import com.art.jeanyvesart_resourceserver.site_data.print.GreenEnergy;
-import com.mysql.cj.Session;
+
 import jakarta.persistence.EntityManager;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
