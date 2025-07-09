@@ -47,7 +47,7 @@ public class EmailController {
         try {
             emailService.sendSimpleMessage(emailClient.getEmailFrom(), emailClient.getEmailTo(), emailClient.getSubject(), emailClient.getMessage());
 
-            emailService.sendSimpleMessage(emailClient.getEmailFrom(), emailClient.getEmailTo(), "Thanks For Contacting Jean Yves Art", "Thank you for reaching out to Jean Yves Art. We will respond to your inquiry as soon as possible.");
+            emailService.sendSimpleMessage(emailClient.getEmailTo(), emailClient.getEmailFrom(), "Thanks For Contacting Jean Yves Art", "Thank you for reaching out to Jean Yves Art. We will respond to your inquiry as soon as possible.");
 
 
            // emailService.sendMessageWithAttachment(emailClient.getEmailTo(), emailClient.getEmailFrom(), emailClient.getSubject(), emailClient.getMessage(), emailClient.getFileAttachment());
