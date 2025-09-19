@@ -14,14 +14,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Controller
-
 @RequestMapping(path = "/reset-password", produces = "application/json")
-
 public class ResetPasswordController {
     private final PasswordEncoder passwordEncoder;
     private final CustomerRepository customerRepository;
+
+    // Added: server-side strength rule to match the client one
+    private static final Pattern STRONG_PWD =
+            Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s]).{8,72}$");
 
     public ResetPasswordController(PasswordEncoder passwordEncoder, CustomerRepository customerRepository) {
         this.passwordEncoder = passwordEncoder;
@@ -46,8 +49,23 @@ public class ResetPasswordController {
                                 Model model,
                                 @Valid @ModelAttribute("customerDto") CustomerDto customerDto,
                                 BindingResult bindingResult) {
-        // Validate the token
 
+        // 1) Cheap early exits before DB hit
+        if (bindingResult.hasErrors()) {
+            return "reset_password";
+        }
+        if (newPassword == null || confirm_new_password == null || !newPassword.equals(confirm_new_password)) {
+            model.addAttribute("error", "Password does not match");
+            model.addAttribute("validated", "was-validated");
+            return "reset_password";
+        }
+        if (!STRONG_PWD.matcher(newPassword).matches()) {
+            model.addAttribute("error", "Use 8–72 chars with upper, lower, number, and symbol.");
+            model.addAttribute("validated", "was-validated");
+            return "reset_password";
+        }
+
+        // 2) Token validation
         Optional<MyCustomer> myCustomerOptional = customerRepository.findByResetToken(token);
         if (myCustomerOptional.isEmpty()) {
             model.addAttribute("error", "Hmm! Something is wrong, please try again later.");
@@ -55,35 +73,31 @@ public class ResetPasswordController {
         }
 
         MyCustomer myCustomer = myCustomerOptional.get();
-        long dateRegister = myCustomer.getResetTokenDate().getTime();
-        long expiredDate = new Date().getTime() - dateRegister;
-        if (expiredDate > 1800000) {
-            myCustomer.setResetTokenUsed(true);
-        }
-        if (bindingResult.hasErrors()) {
-            //model.addAttribute("customerDto", new CustomerDto());
 
-            return "reset_password";
-        } else if (myCustomer.isResetTokenUsed()) {
+        // 3) Expiry check with null guard + persist token invalidation
+        Date tokenDate = myCustomer.getResetTokenDate();
+        long now = System.currentTimeMillis();
+        boolean expired = (tokenDate == null) || (now - tokenDate.getTime() > 30 * 60 * 1000L); // 30 min
+
+        if (expired) {
+            myCustomer.setResetTokenUsed(true);
+            myCustomer.setResetToken(null);
+            customerRepository.save(myCustomer); // persist invalidation
             model.addAttribute("error", "Sorry token is expired");
             return "reset_password";
-        } else if (!newPassword.equals(confirm_new_password)) {
-            model.addAttribute("error", "Password does not match");
-            model.addAttribute("validated", "was-validated");
+        }
 
+        if (myCustomer.isResetTokenUsed()) {
+            model.addAttribute("error", "Sorry token is expired");
             return "reset_password";
         }
-        // Set new password
-        myCustomer.setPassword(passwordEncoder.encode(newPassword));
 
-        // Mark token as used
+        // 4) Save new password + retire token
+        myCustomer.setPassword(passwordEncoder.encode(newPassword));
         myCustomer.setResetTokenUsed(true);
         myCustomer.setResetToken(null);
-
-        // Save the user
         customerRepository.save(myCustomer);
 
         return "redirect:/login";
     }
-
 }
