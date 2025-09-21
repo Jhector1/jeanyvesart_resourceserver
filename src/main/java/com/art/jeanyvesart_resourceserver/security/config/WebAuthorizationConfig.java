@@ -34,7 +34,7 @@ public class WebAuthorizationConfig {
                     new CsrfTokenRequestAttributeHandler()
 
             );
-            c.ignoringRequestMatchers("/h2-console/**", "/cart/**", "/favorite/**", "/stripe/**", "/api/artworks/purchase/**");
+            c.ignoringRequestMatchers("/api/privacy/delete", "/api/privacy/delete/confirm","/h2-console/**", "/cart/**", "/favorite/**", "/stripe/**", "/api/artworks/purchase/**");
         }).headers(h -> h.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin));
 
 

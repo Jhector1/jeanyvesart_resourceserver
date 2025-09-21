@@ -54,7 +54,7 @@ public class ResetPasswordController {
         if (bindingResult.hasErrors()) {
             return "reset_password";
         }
-        if (newPassword == null || confirm_new_password == null || !newPassword.equals(confirm_new_password)) {
+        if (newPassword == null || !newPassword.equals(confirm_new_password)) {
             model.addAttribute("error", "Password does not match");
             model.addAttribute("validated", "was-validated");
             return "reset_password";
