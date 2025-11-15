@@ -1,0 +1,59 @@
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: my-spring-app:latest
+    container_name: my-spring-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Force internal server port
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: prod
+
+      # Postgres connection for Spring (matches application.properties)
+      PROD_DB_HOST: postgres
+      PROD_DB_PORT: 5432
+      PROD_DB_NAME: ${PROD_DB_NAME}
+      PROD_DB_USERNAME: ${PROD_DB_USERNAME}
+      PROD_DB_PASSWORD: ${PROD_DB_PASSWORD}
+
+      # Mail
+      SPRING_MAIL_PORT: ${SPRING_MAIL_PORT}
+      GMAIL_USERNAME: ${GMAIL_USERNAME}
+      GMAIL_PASSWORD: ${GMAIL_PASSWORD}
+
+      # Stripe
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_KEY: ${STRIPE_WEBHOOK_KEY}
+
+      # Base URLs
+      CLIENT_BASE_URL: ${CLIENT_BASE_URL}
+      SERVER_BASE_URL: ${SERVER_BASE_URL}
+    depends_on:
+      - postgres
+    networks:
+      - web
+
+  postgres:
+    image: postgres:16
+    container_name: myapp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${PROD_DB_NAME}
+      POSTGRES_USER: ${PROD_DB_USERNAME}
+      POSTGRES_PASSWORD: ${PROD_DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - web
+
+networks:
+  web:
+    external: true  # use the shared network created with `docker network create web`
+
+volumes:
+  postgres_data:
