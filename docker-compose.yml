@@ -36,7 +36,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - web
+      - public
 
   postgres:
     image: postgres:16
@@ -49,10 +49,10 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - web
+      - public
 
 networks:
-  web:
+  public:
     external: true  # use the shared network created with `docker network create web`
 
 volumes:
