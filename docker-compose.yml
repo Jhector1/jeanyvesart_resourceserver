@@ -1,6 +1,6 @@
 
 services:
-  app:
+  jeanyvesart-server-app:
     build:
       context: .
       dockerfile: Dockerfile
