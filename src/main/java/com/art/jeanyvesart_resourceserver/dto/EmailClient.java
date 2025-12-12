@@ -19,4 +19,7 @@ public class EmailClient implements Serializable {
     private String message;
 
     private String fileAttachment;
+
+    // ✅ Cloudflare Turnstile token from client
+    private String turnstileToken;
 }

@@ -4,8 +4,10 @@ import com.art.jeanyvesart_resourceserver.dto.EmailClient;
 import com.art.jeanyvesart_resourceserver.model.MyCustomer;
 import com.art.jeanyvesart_resourceserver.repository.CustomerRepository;
 import com.art.jeanyvesart_resourceserver.service.EmailServiceImpl;
+import com.art.jeanyvesart_resourceserver.service.TurnstileService;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,10 +40,14 @@ public class EmailController {
 
     final EmailServiceImpl emailService;
     public final CustomerRepository customerRepository;
+    public final TurnstileService turnstileService;
 
-    public EmailController(EmailServiceImpl emailService, CustomerRepository customerRepository) {
+
+    public EmailController(EmailServiceImpl emailService, CustomerRepository customerRepository,  TurnstileService turnstileService) {
         this.emailService = emailService;
         this.customerRepository = customerRepository;
+        this.turnstileService = turnstileService;
+
     }
 
     private static String esc(String s) {
@@ -185,8 +191,15 @@ public class EmailController {
     // ---------- endpoints ----------
 
     @PostMapping("/sendemail")
-    public ResponseEntity<String> sendEmail(@RequestBody EmailClient emailClient) {
+    public ResponseEntity<String> sendEmail(@RequestBody EmailClient emailClient, HttpServletRequest request) {
         try {
+            String ip = request.getRemoteAddr(); // if behind proxy, see note below
+
+            boolean ok = turnstileService.verify(emailClient.getTurnstileToken(), ip);
+            if (!ok) {
+                // IMPORTANT: do not reveal details; just reject
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bot check failed");
+            }
             final String now = EMAIL_TS.format(Instant.now());
             final String escapedMsg = esc(String.valueOf(emailClient.getMessage()));
 
